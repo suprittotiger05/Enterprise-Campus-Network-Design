@@ -1,0 +1,36 @@
+! Switch VLAN and trunk starter example
+! Adjust interface numbers to match your topology and switch model.
+
+enable
+configure terminal
+
+vlan 10
+ name ADMIN
+vlan 20
+ name STAFF
+vlan 30
+ name GUEST
+vlan 40
+ name SERVERS
+
+! Example access ports
+interface range fastEthernet 0/1-4
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ exit
+
+interface range fastEthernet 0/5-8
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ exit
+
+! Example trunk uplink; confirm interface and allowed VLAN support
+interface gigabitEthernet 0/1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,40
+ exit
+
+end
+write memory

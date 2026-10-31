@@ -1,0 +1,59 @@
+! Router-on-a-stick starter example
+! Assumes router interface G0/0 connects to a trunk on the switch.
+! Check the actual interface names supported by your Packet Tracer router.
+
+enable
+configure terminal
+
+interface gigabitEthernet 0/0
+ no shutdown
+ exit
+
+interface gigabitEthernet 0/0.10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.192
+ exit
+
+interface gigabitEthernet 0/0.20
+ encapsulation dot1Q 20
+ ip address 192.168.10.65 255.255.255.192
+ exit
+
+interface gigabitEthernet 0/0.30
+ encapsulation dot1Q 30
+ ip address 192.168.10.129 255.255.255.192
+ exit
+
+interface gigabitEthernet 0/0.40
+ encapsulation dot1Q 40
+ ip address 192.168.10.193 255.255.255.192
+ exit
+
+! DHCP examples. Exclude gateway and infrastructure addresses first.
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.10.65 192.168.10.74
+ip dhcp excluded-address 192.168.10.129 192.168.10.138
+ip dhcp excluded-address 192.168.10.193 192.168.10.202
+
+ip dhcp pool ADMIN
+ network 192.168.10.0 255.255.255.192
+ default-router 192.168.10.1
+ exit
+
+ip dhcp pool STAFF
+ network 192.168.10.64 255.255.255.192
+ default-router 192.168.10.65
+ exit
+
+ip dhcp pool GUEST
+ network 192.168.10.128 255.255.255.192
+ default-router 192.168.10.129
+ exit
+
+ip dhcp pool SERVERS
+ network 192.168.10.192 255.255.255.192
+ default-router 192.168.10.193
+ exit
+
+end
+write memory

@@ -1,0 +1,23 @@
+! Example guest isolation ACL for router-on-a-stick.
+! This blocks the guest subnet from reaching the listed internal subnets.
+! Apply inbound on the guest subinterface. Test carefully in your lab.
+
+enable
+configure terminal
+
+ip access-list extended GUEST-IN
+ deny ip 192.168.10.128 0.0.0.63 192.168.10.0 0.0.0.63
+ deny ip 192.168.10.128 0.0.0.63 192.168.10.64 0.0.0.63
+ deny ip 192.168.10.128 0.0.0.63 192.168.10.192 0.0.0.63
+ permit ip 192.168.10.128 0.0.0.63 any
+ exit
+
+interface gigabitEthernet 0/0.30
+ ip access-group GUEST-IN in
+ exit
+
+end
+write memory
+
+! Note: This is a teaching example, not a complete security policy.
+! Add DNS/DHCP exceptions or specific permitted services if your design needs them.
